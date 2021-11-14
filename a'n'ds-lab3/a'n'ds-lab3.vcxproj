@@ -153,6 +153,10 @@
   <ItemGroup>
     <ClCompile Include="..\..\a%27n%27ds-lab3\a%27n%27ds-lab3\a%27n%27ds-lab3.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\a%27n%27ds-lab3\a%27n%27ds-lab3\BinaryHeap.h" />
+    <ClInclude Include="NodeTree.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
