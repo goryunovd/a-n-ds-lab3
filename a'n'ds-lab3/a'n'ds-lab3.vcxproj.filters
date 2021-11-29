@@ -26,5 +26,14 @@
     <ClInclude Include="..\..\a%27n%27ds-lab3\a%27n%27ds-lab3\BinaryHeap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\a%27n%27ds-lab3\a%27n%27ds-lab3\iterartors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\a%27n%27ds-lab3\a%27n%27ds-lab3\Queue.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\a%27n%27ds-lab3\a%27n%27ds-lab3\stack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -155,6 +155,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\a%27n%27ds-lab3\a%27n%27ds-lab3\BinaryHeap.h" />
+    <ClInclude Include="..\..\a%27n%27ds-lab3\a%27n%27ds-lab3\iterartors.h" />
+    <ClInclude Include="..\..\a%27n%27ds-lab3\a%27n%27ds-lab3\Queue.h" />
+    <ClInclude Include="..\..\a%27n%27ds-lab3\a%27n%27ds-lab3\stack.h" />
     <ClInclude Include="NodeTree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
