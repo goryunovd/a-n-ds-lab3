@@ -1,21 +1,22 @@
 #pragma once
 #include "BinaryHeap.h"
 #include<iostream>
+using namespace std;
 template <class T>
 class Queue
 {
 private:
-	class Node
+	class elem
 	{
 	public:
-		Node(T data = 0, Node* next = NULL) : data(data), next(next) {}
+		elem(T data = 0, elem* next = NULL) : data(data), next(next) {}
 	
 		T data;
-		Node* next;
+		elem* next;
 	};
 
-	Node* head;
-	Node* last;
+	elem* head;
+	elem* last;
 
 public:
 	Queue() 
@@ -38,14 +39,14 @@ public:
 		}
 		else
 		{
-			Node* tmp = head;
+			elem* tmp = head;
 			head = head->next;
 			delete tmp;
 		}
 	};
 
-	void push(T) {
-		Node* tmp = new Node(data);
+	void push(T data) {
+		elem* tmp = new elem(data);
 		if (empty())
 		{
 			head = tmp;

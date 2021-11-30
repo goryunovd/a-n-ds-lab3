@@ -1,25 +1,25 @@
 #ifndef STACK_H
 #define STACK_H
 #include <iostream>
-
+using namespace std;
 template <class T>
 class Stack
 {
 private:
-	class Node
+	class elem
 	{
 	public:
-		Node(T data, Node* next=NULL):data(data),next(next) {}
-		~Node() = default;
-		void setNext(Node* newnext) { nex = newnext;}
-		Node* getNext() { return next; }
+		elem(T data, elem* next=NULL):data(data),next(next) {}
+		~elem() = default;
+		void setNext(elem* newnext) { next = newnext;}
+		elem* getNext() { return next; }
 		T getData() { return data; }
 	private:
 		T data;
-		Node* next;
+		elem* next;
 	};
 
-	Node* head;
+	elem* head;
 public:
 	Stack() {
 		head = NULL;
@@ -39,15 +39,15 @@ public:
 		}
 		else
 		{
-			Node* tmp = head;
+			elem* tmp = head;
 			head = head->getNext();
 			delete tmp;
 		}
 	};
 
-	void push(T elem) {
-		Node* tmp = new Node(data);
-		Node* cur = head;
+	void push(T data) {
+		elem* tmp = new elem(data);
+		elem* cur = head;
 		head = tmp;
 		head->setNext(cur);
 		

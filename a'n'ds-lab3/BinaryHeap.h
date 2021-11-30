@@ -1,7 +1,7 @@
 #pragma once
 #ifndef BINARYHEAP_H
 #include<iostream>
-#include"NodeTree.h"
+//#include"NodeTree.h"
 #include"iterartors.h"
 #include "stack.h"
 #include "Queue.h"
@@ -11,8 +11,16 @@ using namespace std;
 class Heap
 {
 private:
-	friend class Node;
-	Node* root; int hight, numberNode;
+
+class Node
+{ 
+public: 
+	Node* left, *right, *prev; int data; 
+	Node(int data = 0, Node* left = NULL, Node* right = NULL, Node* prev = NULL) :data(data), left(left), right(right), prev(prev) {}
+	~Node() = default;
+};
+Node* root;
+	int hight, numberNode;
 public:
 	Heap() {root = NULL; hight = 0; numberNode = 0; }
 
@@ -29,7 +37,7 @@ public:
 		friend class BinaryHeap;
 
 		dfs_iterator(Node* root) {
-			current = root;
+			cur= root;
 			stack = new Stack<Node*>();
 		}
 		~dfs_iterator() { delete stack; }
@@ -37,12 +45,9 @@ public:
 		bool has_next() override;
 
 		int next() override;
-
-	
-
 		Stack<Node*>* stack;
 
-		Node* current;
+		Node* cur;
 	};
 
 	class bfs_iterator : public Iterator
@@ -51,7 +56,7 @@ public:
 		friend class BinaryHeap;
 
 		bfs_iterator(Node* root) {
-			current = root;
+			cur = root;
 			queue = new Queue<Node*>();
 		}
 
@@ -61,27 +66,36 @@ public:
 
 		int next() override;
 
-	private:
+
 		Queue<Node*>* queue;
-		Node* current;
+		Node* cur;
 	};
+	Iterator* create_dfs() {
+		return new dfs_iterator(root);
+	}
+
+	Iterator* create_bfs() {
+		bfs_iterator* new_bfs_iterator = new bfs_iterator(root);
+		new_bfs_iterator->queue->push(root);
+		return new_bfs_iterator;
+	}
 	Node* LastParent(int lay)
 	{
 		Node* last = root;
 		int tmp_lay = lay;
 		int tmp_Number = numberNode;
-		if (numberNode < lay) { tmp_lay = tmp_lay * 2; }
+		if (numberNode > lay) { tmp_lay = tmp_lay * 2; }
 
 		while (tmp_lay != 2) 
 		{
 			if (tmp_Number <= (tmp_lay / 2)) 
 			{
-				last = last->getLeft;
+				last = last->left;
 				tmp_lay = tmp_lay / 2;
 			}
 			else
 			{
-				last = last->getRight;
+				last = last->right;
 				numberNode = tmp_Number - tmp_lay / 2;
 				tmp_lay = tmp_lay / 2;
 			}
@@ -90,39 +104,39 @@ public:
 	}
 	void siftDown(Node* tmp)
 	{
-		if (tmp->getLeft == NULL && tmp->getRight == NULL)
+		if (tmp->left == NULL && tmp->right == NULL)
 		{
 			return;
 		}
 		Node* max = tmp;
-		if (tmp->getRight == NULL)
+		if (tmp->right == NULL)
 		{
-			if (tmp->getData < tmp->getLeft.getData) { max = tmp->getLeft; }
+			if (tmp->data < tmp->left->data) { max = tmp->left; }
 		}
 		else { return; }
-		if (tmp->getLeft != NULL && tmp->getRight != NULL)
+		if (tmp->left != NULL && tmp->right != NULL)
 		{
-			if (tmp->getData < tmp->getRight || tmp->getData < tmp->getLeft.getData)
+			if ((tmp->data < tmp->right->data) || tmp->data < tmp->left->data)
 			{
-				if (tmp->getLeft.getData > tmp->getRight->getData) { max = tmp->getLeft; }
+				if (tmp->left->data > tmp->right->data) { max = tmp->left; }
 			}
-			else { max = tmp->getRight; }
+			else { max = tmp->right; }
 		}
 		else
 		{
 			return;
 		}
-		swap(tmp->getData, max->getData);
+		swap(tmp->data, max->data);
 		siftDown(max);
 	}
 	void siftUp(Node* tmp) 
 	{
-		if (tmp->getPrev == NULL) { return; }
+		if (tmp->prev == NULL) { return; }
 		else
 		{ 
-			if (tmp->getData > tmp->getPrev.getData)
+			if (tmp->data > tmp->prev->data)
 			{
-				swap(tmp->getData, tmp->getPrev.getData); siftUp(tmp->getPrev);
+				swap(tmp->data, tmp->prev->data); siftUp(tmp->prev);
 			}
 			else
 			{
@@ -132,10 +146,10 @@ public:
 	}
 	void Heapify(Node* tmp)
 	{
-		if (tmp->getPrev == NULL) { siftDown(tmp); }
+		if (tmp->prev == NULL) { siftDown(tmp); }
 		else
 		{
-			if (tmp->getData > tmp->getPrev.getData)
+			if (tmp->data > tmp->prev->data)
 			{ siftUp(tmp); }
 			else 
 			{ siftDown(tmp); } 
@@ -148,7 +162,7 @@ public:
 			findNode(data);
 			return true;
 		}
-		catch (invalid_argument)
+		catch (out_of_range)
 		{
 			return false;
 		}
@@ -159,10 +173,10 @@ public:
 		dfs_iterator* dfs = new dfs_iterator(root);
 		while (dfs->has_next()) 
 		{
-			elem = dfs->current;
-			if (dfs->has_next() == data) { delete dfs; return elem; }
+			elem = dfs->cur;
+			if (dfs->next() == data) { delete dfs; return elem; }
 		}
-		delete dfs; throw invalid_argument("Element ot found");
+		delete dfs; throw out_of_range("Element ot found");
 	}
 	void insert(int elem)
 	{
@@ -181,46 +195,80 @@ public:
 			for (int i = 0; i < hight - 1; i++) { last = last * 2; }
 			if (last < numberNode) { numberNode = 1; hight++; last =last* 2; }
 			cur = LastParent(last);
-			if (cur->getLeft == NULL) { cur->getLeft = tmp; tmp->getPrev = cur; }
-			else { cur->getRight = tmp; tmp->getPrev = cur; }
+			if (cur->left == NULL) { cur->left = tmp; tmp->prev = cur; }
+			else { cur->right = tmp; tmp->prev = cur; }
 			Heapify(tmp);
 
 		}
 	}
 
-	void remove(int elem)
+	void remove(int data)
 	{
-
+		Node* deleteNode = findNode(data);
+		if ((root->left == NULL) && (root->right == NULL))
+		{
+			delete root; root = NULL; hight = 0; numberNode = 0;
+		}
+		int last = 1;
+		for (int i = 0; i < hight - 1; i++) { last = last * 2; }
+		Node* lastElem = LastParent(last);
+		if (lastElem->right != NULL)
+		{
+			lastElem = lastElem->right;
+			lastElem->prev->right = NULL;
+			numberNode--;
+		}
+		else
+		{
+			lastElem = lastElem->left;
+			lastElem->prev->left = NULL;
+			numberNode--;
+		}
+		if (numberNode == 0)
+		{
+			numberNode = 1;
+			hight--;
+			for (int i = 0; i < hight-1; i++)
+			{
+				numberNode = numberNode * 2;
+			}
+		}
+		if (deleteNode == lastElem) { delete lastElem; }
+		else
+		{
+			swap(lastElem->data, deleteNode->data);
+			Heapify(deleteNode);
+		}
 	}
 
 };
 
 bool Heap::dfs_iterator::has_next() {
-	return current != NULL;
+	return cur != NULL;
 }
 bool Heap::bfs_iterator::has_next() {
-	return current != NULL;
+	return cur != NULL;
 }
 int Heap::bfs_iterator::next() 
 {
 	if (!has_next()) { throw out_of_range("No moe elements"); }
-	int tmp = current->getData;
-	if (current->getLeft != NULL) { queue->push(current->getLeft); }
-	if (current->getRight != NULL) { queue->push(current->getRight); }
+	int tmp = cur->data;
+	if (cur->left != NULL) { queue->push(cur->left); }
+	if (cur->right != NULL) { queue->push(cur->right); }
 	queue->pop();
-	try { current = queue->front(); }
-	catch (out_of_range) { current = NULL; }
+	try { cur = queue->front(); }
+	catch (out_of_range) { cur = NULL; }
 	return tmp;
 }
 int Heap::dfs_iterator::next() 
 {
 	if (!has_next()) { throw out_of_range("No more elements"); }
-	int tmp = current->getData;
-	if (current->getRight != NULL) { stack->push(current->getRight); }
-	if (current->getLeft != NULL) { current = current->getLeft; }
+	int tmp = cur->data;
+	if ((cur->right) != NULL) { stack->push(cur->right); }
+	if ((cur->left) != NULL) { cur = cur->left; }
 	else {
-		try { current = stack->top(); }
-		catch (out_of_range) { current = NULL; }
+		try { cur = stack->top(); stack->pop(); }
+		catch (out_of_range) { cur = NULL; }
 	}
 	return tmp;
 }

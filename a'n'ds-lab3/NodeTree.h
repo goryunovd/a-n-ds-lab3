@@ -23,14 +23,6 @@ private:
 	Node* left, *right, *prev;
 	int data;
 };
-/*
-Node::Node()
-{
-}
 
-Node::~Node()
-{
-}
-*/
 
 #endif // !NODETREE_H
