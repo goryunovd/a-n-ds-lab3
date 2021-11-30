@@ -65,7 +65,82 @@ public:
 		Queue<Node*>* queue;
 		Node* current;
 	};
+	Node* LastParent(int lay)
+	{
+		Node* last = root;
+		int tmp_lay = lay;
+		int tmp_Number = numberNode;
+		if (numberNode < lay) { tmp_lay = tmp_lay * 2; }
 
+		while (tmp_lay != 2) 
+		{
+			if (tmp_Number <= (tmp_lay / 2)) 
+			{
+				last = last->getLeft;
+				tmp_lay = tmp_lay / 2;
+			}
+			else
+			{
+				last = last->getRight;
+				numberNode = tmp_Number - tmp_lay / 2;
+				tmp_lay = tmp_lay / 2;
+			}
+		}
+		return last;
+	}
+	void siftDown(Node* tmp)
+	{
+		if (tmp->getLeft == NULL && tmp->getRight == NULL)
+		{
+			return;
+		}
+		Node* max = tmp;
+		if (tmp->getRight == NULL)
+		{
+			if (tmp->getData < tmp->getLeft.getData) { max = tmp->getLeft; }
+		}
+		else { return; }
+		if (tmp->getLeft != NULL && tmp->getRight != NULL)
+		{
+			if (tmp->getData < tmp->getRight || tmp->getData < tmp->getLeft.getData)
+			{
+				if (tmp->getLeft.getData > tmp->getRight->getData) { max = tmp->getLeft; }
+			}
+			else { max = tmp->getRight; }
+		}
+		else
+		{
+			return;
+		}
+		swap(tmp->getData, max->getData);
+		siftDown(max);
+	}
+	void siftUp(Node* tmp) 
+	{
+		if (tmp->getPrev == NULL) { return; }
+		else
+		{ 
+			if (tmp->getData > tmp->getPrev.getData)
+			{
+				swap(tmp->getData, tmp->getPrev.getData); siftUp(tmp->getPrev);
+			}
+			else
+			{
+				return;
+			}
+		}
+	}
+	void Heapify(Node* tmp)
+	{
+		if (tmp->getPrev == NULL) { siftDown(tmp); }
+		else
+		{
+			if (tmp->getData > tmp->getPrev.getData)
+			{ siftUp(tmp); }
+			else 
+			{ siftDown(tmp); } 
+		}
+	}
 	bool contains(int data)
 	{
 		try
@@ -91,7 +166,26 @@ public:
 	}
 	void insert(int elem)
 	{
+		if (root == NULL) {
+			Node* node = new Node(elem);
+			root = node;
+			numberNode = 1;
+			hight = 1;
+		}
+		else 
+		{
+			Node* tmp = new Node(elem);
+			Node* cur = root;
+			int last = 1;
+			numberNode++;
+			for (int i = 0; i < hight - 1; i++) { last = last * 2; }
+			if (last < numberNode) { numberNode = 1; hight++; last =last* 2; }
+			cur = LastParent(last);
+			if (cur->getLeft == NULL) { cur->getLeft = tmp; tmp->getPrev = cur; }
+			else { cur->getRight = tmp; tmp->getPrev = cur; }
+			Heapify(tmp);
 
+		}
 	}
 
 	void remove(int elem)
