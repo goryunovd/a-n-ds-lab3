@@ -20,18 +20,18 @@ public:
 	~Node() = default;
 };
 Node* root;
-	int hight, numberNode;
+	int hight, numberNode;//hight of our heap and vertical number of nodes on last lay
 public:
-	Heap() {root = NULL; hight = 0; numberNode = 0; }
+	Heap() {root = NULL; hight = 0; numberNode = 0; }//create heap with 0 nodes
 
-	Heap(int data)
+	Heap(int data)//heap with 1/first node
 	{
 		Node* elem = new Node(data);
 		root = elem;
 		hight = 1; numberNode = 1;
 	}
 
-	class dfs_iterator : public Iterator
+	class dfs_iterator : public Iterator //depth first search 
 	{
 	public:
 		friend class BinaryHeap;
@@ -50,7 +50,7 @@ public:
 		Node* cur;
 	};
 
-	class bfs_iterator : public Iterator
+	class bfs_iterator : public Iterator //breath first search
 	{
 	public:
 		friend class BinaryHeap;
@@ -79,7 +79,7 @@ public:
 		new_bfs_iterator->queue->push(root);
 		return new_bfs_iterator;
 	}
-	Node* LastParent(int lay)
+	Node* LastParent(int lay)  //find parent int the end to insert node 
 	{
 		Node* last = root;
 		int tmp_lay = lay;
@@ -96,13 +96,13 @@ public:
 			else
 			{
 				last = last->right;
-				numberNode = tmp_Number - tmp_lay / 2;
+				tmp_Number= tmp_Number - tmp_lay / 2;
 				tmp_lay = tmp_lay / 2;
 			}
 		}
 		return last;
 	}
-	void siftDown(Node* tmp)
+	void siftDown(Node* tmp)// sift small node deeper
 	{
 		if (tmp->left == NULL && tmp->right == NULL)
 		{
@@ -126,24 +126,22 @@ public:
 		{
 			return;
 		}
-		//swap(tmp->data, max->data);
-		int swap = tmp->data;
-		tmp->data = max->data;
-		max->data = swap;
+		swap(tmp->data, max->data);
+
 		siftDown(max);
 	}
-	void siftUp(Node* tmp) 
+	void siftUp(Node* tmp) //sift big nod higher 
 	{
 		if (tmp->prev == NULL) { return; }
 		else
 		{ 
 			if (tmp->data > tmp->prev->data)
 			{
-			//	swap(tmp->data, tmp->prev->data); 
-				int swap = tmp->data;
-				tmp->data = tmp->prev->data;
-				tmp->prev->data = swap;
-				siftUp(tmp->prev);
+				swap(tmp->data, tmp->prev->data); 
+			//	int swap = tmp->data;
+		//		tmp->data = tmp->prev->data;
+		//		tmp->prev->data = swap;
+			siftUp(tmp->prev);
 			}
 			else
 			{
@@ -151,7 +149,7 @@ public:
 			}
 		}
 	}
-	void Heapify(Node* tmp)
+	void Heapify(Node* tmp)//to understand what we should do with inserted node
 	{
 		if (tmp->prev == NULL) { siftDown(tmp); }
 		else
@@ -202,7 +200,8 @@ public:
 			for (int i = 0; i < hight - 1; i++) { last = last * 2; }
 			if (last < numberNode) { numberNode = 1; hight++; last =last* 2; }
 			cur = LastParent(last);
-			if (cur->left == NULL) { cur->left = tmp; tmp->prev = cur; }
+			if (cur->left == NULL)
+			{ cur->left = tmp; tmp->prev = cur; }
 			else { cur->right = tmp; tmp->prev = cur; }
 			Heapify(tmp);
 

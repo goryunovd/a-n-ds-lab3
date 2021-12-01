@@ -32,7 +32,7 @@ public:
 		}
 	};
 
-	void pop() {
+	void pop() {//delete
 		if (empty())
 		{
 			throw out_of_range("No more elements");
@@ -45,7 +45,7 @@ public:
 		}
 	};
 
-	void push(T data) {
+	void push(T data) {//add
 		elem* tmp = new elem(data);
 		elem* cur = head;
 		head = tmp;
@@ -57,7 +57,7 @@ public:
 		return head == nullptr;
 	};
 
-	T top() {
+	T top() {//first element
 		if (empty())
 		{
 			throw out_of_range("Empty");

@@ -1,5 +1,4 @@
 #pragma once
-#include "BinaryHeap.h"
 #include<iostream>
 using namespace std;
 template <class T>
@@ -32,7 +31,7 @@ public:
 		}
 	};
 
-	void pop() {
+	void pop() {//delete
 		if (empty())
 		{
 			throw out_of_range("No more elements");
@@ -45,7 +44,7 @@ public:
 		}
 	};
 
-	void push(T data) {
+	void push(T data) {//add
 		elem* tmp = new elem(data);
 		if (empty())
 		{
@@ -64,7 +63,7 @@ public:
 
 	};
 
-	T front() {
+	T front() {//first element
 		if (empty())
 		{
 			throw out_of_range("Empty");
@@ -75,7 +74,7 @@ public:
 		}
 	};
 
-	T back() {
+	T back() {//last element
 		if (empty())
 		{
 			throw out_of_range("Empty");
