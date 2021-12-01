@@ -116,7 +116,7 @@ public:
 		else { return; }
 		if (tmp->left != NULL && tmp->right != NULL)
 		{
-			if ((tmp->data < tmp->right->data) || tmp->data < tmp->left->data)
+			if ((tmp->data < tmp->right->data) || (tmp->data < tmp->left->data))
 			{
 				if (tmp->left->data > tmp->right->data) { max = tmp->left; }
 			}
@@ -126,7 +126,10 @@ public:
 		{
 			return;
 		}
-		swap(tmp->data, max->data);
+		//swap(tmp->data, max->data);
+		int swap = tmp->data;
+		tmp->data = max->data;
+		max->data = swap;
 		siftDown(max);
 	}
 	void siftUp(Node* tmp) 
@@ -136,7 +139,11 @@ public:
 		{ 
 			if (tmp->data > tmp->prev->data)
 			{
-				swap(tmp->data, tmp->prev->data); siftUp(tmp->prev);
+			//	swap(tmp->data, tmp->prev->data); 
+				int swap = tmp->data;
+				tmp->data = tmp->prev->data;
+				tmp->prev->data = swap;
+				siftUp(tmp->prev);
 			}
 			else
 			{

@@ -12,9 +12,11 @@ namespace UnitTest1
 	{
 	public:
 		
-		TEST_METHOD(Test_queue)
+		TEST_METHOD(Test_dfs)
 		{
-			
+			Heap binary(2);
+			Iterator* dfs;
+			int 
 		}
 	};
 }
