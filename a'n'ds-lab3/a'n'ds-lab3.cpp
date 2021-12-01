@@ -1,7 +1,6 @@
 #include <iostream>
 #include "BinaryHeap.h"
 #include"iterartors.h"
-#include"NodeTree.h"
 #include "Queue.h"
 #include"stack.h"
 using namespace std;
@@ -15,8 +14,8 @@ int main()
 	heap.insert(5);//!
 	heap.insert(100);
 	heap.insert(40);
-	heap.insert(6);//!
-	heap.insert(7);//!
+	heap.insert(6);
+	heap.insert(7);
 
 
 	dfs_1 = heap.create_dfs();
